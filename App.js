@@ -357,14 +357,15 @@ function Chat({ user, friend, onBack }) {
   async function sendMsg(e) {
     e.preventDefault();
     if (!input.trim() || !key) return;
-    const encrypted = await encryptMsg(key, input);
+    const messageToSend = input;
+    setInput(""); // clear input immediately for UI responsiveness
+    const encrypted = await encryptMsg(key, messageToSend);
     await window.firebaseDB.collection('chats').doc(chatId)
       .collection('messages').add({
         from: user.id,
         encrypted,
         ts: Date.now()
       });
-    setInput("");
   }
 
   return React.createElement(
